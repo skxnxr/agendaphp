@@ -31,20 +31,26 @@
                               <th>Acciones</th>
                          </tr>
                     </thead>
-                    <tbody>   
-                         <tr>
-                              <td>Juab</td>
-                              <td>Udemy</td>
-                              <td>12212321</td>
-                              <td>
-                                   <a class="btn btn-editar" href="editar.php?id=1">
-                                        <i class="fas fa-pen-square"></i>
-                                   </a>
-                                   <button data-id=1 type="button" class="btn btn-borrar">
-                                        <i class="fas fa-trash-alt"></i>
-                                   </button>
-                              </td>
-                         </tr>
+                    <tbody>
+                         <?php $contactos = obtenerContactos(); 
+                         if($contactos->num_rows) { 
+                              foreach($contactos as $contacto) { ?> 
+                           
+                              <tr>
+                                   <td><?php echo $contacto['nombre']; ?></td>
+                                   <td><?php echo $contacto['empresa']; ?></td>
+                                   <td><?php echo $contacto['telefono']; ?></td>
+                                   <td>
+                                        <a class="btn btn-editar" href="editar.php?id=<?php echo $contacto['id']; ?>">
+                                             <i class="fas fa-pen-square"></i>
+                                        </a>
+                                        <button data-id="<?php echo $contacto['id']; ?>" type="button" class="btn btn-borrar">
+                                             <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                   </td>
+                              </tr>
+                              <?php } 
+                         }?>
                     </tbody>
                </table>
           </div>
