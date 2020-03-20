@@ -32,9 +32,9 @@ if($_POST['accion'] == 'crear'){
           );
      }
 echo json_encode($respueta);
-
-
-     
+}
+if($_GET['accion'] == 'borrar') {
+     echo json_encode($_GET);
 }
 
 

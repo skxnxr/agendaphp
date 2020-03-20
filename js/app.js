@@ -6,6 +6,10 @@ eventListeners();
 function eventListeners(){
     //Cuando el formulario de crear o editar se ejecuta
     formularioContactos.addEventListener('submit', leerFormulario);
+
+    //Listener para eliminar el boton
+    listadoContactos.addEventListener('click', eliminarContacto)
+
 }
 function leerFormulario(e){
     e.preventDefault();
@@ -38,7 +42,7 @@ function leerFormulario(e){
             //Editar el contacto
         }
     }
-
+}
 // Inserta en la base de datos via Ajax
 function inserarBD(datos){
     //Llamado a Ajax
@@ -50,69 +54,100 @@ function inserarBD(datos){
     xhr.open('POST', 'inc/modelos/modelo-contactos.php', true);
 
     //Pasar los datos
-    xhr.onload = function(){
-        if (this.status === 200) {
-            console.log(JSON.parse(xhr.responseText));
-            //Leemos la respuesta de php
-            const respuesta = JSON.parse(xhr.responseText);
-            
-            //inserta un nuevo elemento a la tabla
-            const nuevoContacto = document.createElement('tr');
-            nuevoContacto.innerHTML = `
-                <td>${respuesta.datos.nombre}</td>
-                <td>${respuesta.datos.empresa}</td>
-                <td>${respuesta.datos.telefono}</td>
-            `;
+    xhr.onload = function() {
+          if(this.status === 200) {
+               console.log(JSON.parse( xhr.responseText) ); 
+               // leemos la respuesta de PHP
+               const respuesta = JSON.parse( xhr.responseText);
 
-            //Crear contenedor para lo botones
-            const contenedorAcciones = document.createElement('td');
+               // Inserta un nuevo elemento a la tabla
+               const nuevoContacto = document.createElement('tr');
 
-            //Crear el icono de editar
-            const iconoEditar = document.createElement('i');
-            iconoEditar.classList.add('fas', 'fa-pen-square');
+               nuevoContacto.innerHTML = `
+                    <td>${respuesta.datos.nombre}</td>
+                    <td>${respuesta.datos.empresa}</td>
+                    <td>${respuesta.datos.telefono}</td>
+               `;
 
-            //crea el enlace para editar
-            const btnEditar = document.createElement('a');
-            btnEditar.appendChild(iconoEditar);
-            btnEditar.href = `editar.php?id=${respuesta.datos.id_insertado}`;
-            btnEditar.classList.add('btn', 'btn-editar');
+               // crear contenedor para los botones
+               const contenedorAcciones = document.createElement('td');
 
-            //Agregando al padre
-            contenedorAcciones.appendChild(btnEditar);
+               // crear el icono de Editar
+               const iconoEditar = document.createElement('i');
+               iconoEditar.classList.add('fas', 'fa-pen-square');
 
-            //Creando el icono de eliminar
-            const iconoEliminar = document.createElement('i');
-            iconoEliminar.classList.add('fas', 'fa-trash-alt');
+               // crea el enlace para editar
+               const btnEditar = document.createElement('a');
+               btnEditar.appendChild(iconoEditar);
+               btnEditar.href = `editar.php?id=${respuesta.datos.id_insertado}`;
+               btnEditar.classList.add('btn', 'btn-editar');
 
-            //Crear el boton de eliminar
-            const btnEliminar = document.createElement('button');
-            btnEliminar.appendChild(iconoEliminar);
-            btnEliminar.setAttribute('data-id', respuesta.datos.id_insertado);
-            btnEliminar.classList.add('btn', 'btn-borrar');
+               // agregarlo al padre
+               contenedorAcciones.appendChild(btnEditar);
 
-            //Agregarlo al padre
-            contenedorAcciones.appendChild(btnEliminar);
+               // crear el icono de eliminar
+               const iconoEliminar = document.createElement('i');
+               iconoEliminar.classList.add('fas', 'fa-trash-alt');
 
-            //Agregarlo al tr
-            nuevoContacto.appendChild(contenedorAcciones);
+               // crear el boton de eliminar
+               const btnEliminar = document.createElement('button');
+               btnEliminar.appendChild(iconoEliminar);
+               btnEliminar.setAttribute('data-id', respuesta.datos.id_insertado);
+               btnEliminar.classList.add('btn', 'btn-borrar');
 
-            //Agregarlo con los contactos
-            listadoContactos.appendChild(nuevoContacto);
+               // agregarlo al padre
+               contenedorAcciones.appendChild(btnEliminar);
 
-            //Resetear el form
-            document.querySelector('form').reset();
+               // Agregarlo al tr
+               nuevoContacto.appendChild(contenedorAcciones);
 
-            
-            //Mostrar la notificacion
-            mostrarNotificacion('contacto creado correctamente', 'correcto');
+               // agregarlo con los contactos
+               listadoContactos.appendChild(nuevoContacto);       
+               
+               // Resetear el formulario
+               document.querySelector('form').reset();
 
-        }
-    }
+               // Mostrar la notificacion
+               mostrarNotificacion('Contacto Creado Correctamente', 'correcto');
+
+               // Actualizar el número
+               numeroContactos();
+          }
+     }
 
     //Enviar los datos
     xhr.send(datos);
 }
 
+
+
+//Eliminar el contacto
+function eliminarContacto(e){
+    if(e.target.parentElement.classList.contains('btn-borrar')){
+        //Tomar el id del elemento a eliminar
+        const id = e.target.parentElement.getAttribute('data-id');
+        // console.log(id);
+
+        //Preguntar al usuario si esta seguro
+        const respuesta = confirm('¿Estas seguro?');
+        if (respuesta) {
+            //Llamado a Ajax
+            //Crear el objeto
+            const xhr = new XMLHttpRequest();
+
+            //Abrir la conexion
+            xhr.open('GET', `inc/modelos/modelo-contactos.php?id=${id}&accion=borrar`, true);
+            //Leer la respuesta
+            xhr.onload = function() {
+                if (this.status === 200) {
+                     const resultado = JSON.parse(xhr.responseText);
+                     console.log(resultado);
+                }
+            }
+            //Enviar la peticion
+            xhr.send();
+        }
+    }
 }
 
 //Notificacion en pantalla
