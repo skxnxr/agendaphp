@@ -60,6 +60,13 @@ if($_GET['accion'] == 'borrar') {
      echo json_encode($respuesta);
 }
 
+if($_POST['accion'] == 'editar') {
+     //Creará un nuevo registro en la BD
+     //require_once('../funciones/bd.php');
+     echo json_encode($_POST);
+
+
+}
 
 
 

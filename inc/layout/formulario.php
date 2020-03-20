@@ -17,11 +17,11 @@
                <?php 
                     //Operador ternario
                     $textoBtn = ($contacto['telefono']) ? 'Guardar' : 'Añadir';
-                    $accion = ($contacto['telefono']) ? 'Editar' : 'Crear';
+                    $accion = ($contacto['telefono']) ? 'editar' : 'Crear';
                ?>
-                    <input type="hidden" value="<?php echo $accion; ?>" id="accion">
+                    <input type="hidden" id="accion" value="<?php echo $accion; ?>">
                     <?php if(isset($contacto['id'])) { ?>
-                         <input type="hidden" value="<?php echo $contacto['id']; ?>" id="id">
+                         <input type="hidden" id="id" value="<?php echo $contacto['id']; ?>">
                     <?php } ?>
                     <input type="submit" value="<?php echo $textoBtn; ?>">
                </div> 

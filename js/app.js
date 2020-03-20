@@ -37,11 +37,16 @@ function leerFormulario(e){
 
         // console.log(...infoContacto);
 
-        if (accion === 'crear') {
+        if (accion === 'Crear') {
             //Crearemos un nuevo contacto
             inserarBD(infoContacto);
         }else{
             //Editar el contacto
+            //leer el id
+            const idRegistro = document.querySelector('#id').value; 
+            infoContacto.append('id', idRegistro);
+            actualizarRegistro(infoContacto);
+
         }
     }
 }
@@ -121,6 +126,26 @@ function inserarBD(datos){
     xhr.send(datos);
 }
 
+function actualizarRegistro(datos){
+    // console.log(...datos);
+    //Crear el objeto
+    const xhr = new XMLHttpRequest();
+
+    //Abrir la conexión
+    xhr.open('POST', 'inc/modelos/modelo-contactos.php', true);
+
+    //Leer la respuesta
+    xhr.onload = function(){
+        if (this.status === 200) {
+            const respuesta = JSON.parse(xhr.responseText);
+            console.log(respuesta);
+        }
+    }
+
+    //Enviar la peticion
+    xhr.send(datos);
+
+}
 
 
 //Eliminar el contacto
