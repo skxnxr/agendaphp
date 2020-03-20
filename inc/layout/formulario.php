@@ -17,7 +17,7 @@
                <?php 
                     //Operador ternario
                     $textoBtn = ($contacto['telefono']) ? 'Guardar' : 'Añadir';
-                    $accion = ($contacto['telefono']) ? 'editar' : 'Crear';
+                    $accion = ($contacto['telefono']) ? 'editar' : 'crear';
                ?>
                     <input type="hidden" id="accion" value="<?php echo $accion; ?>">
                     <?php if(isset($contacto['id'])) { ?>

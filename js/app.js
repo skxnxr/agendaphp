@@ -37,7 +37,7 @@ function leerFormulario(e){
 
         // console.log(...infoContacto);
 
-        if (accion === 'Crear') {
+        if (accion === 'crear') {
             //Crearemos un nuevo contacto
             inserarBD(infoContacto);
         }else{
@@ -138,7 +138,18 @@ function actualizarRegistro(datos){
     xhr.onload = function(){
         if (this.status === 200) {
             const respuesta = JSON.parse(xhr.responseText);
-            console.log(respuesta);
+            // console.log(respuesta);
+            if(respuesta.respuesta === 'correcto'){
+                //Mostrar notificacion
+                mostrarNotificacion('Contacto editado correctamente', 'correcto')
+            }else{
+                //Hubo un error
+                mostrarNotificacion('Hubo un error', 'error')
+            }
+            //Despues de 3 segundos redireccionar
+            setTimeout(() => {
+                window.location.href = 'index.php';
+            }, 4000);
         }
     }
 
